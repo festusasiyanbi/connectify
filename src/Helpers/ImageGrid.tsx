@@ -9,7 +9,7 @@ import {
 import React, {useRef, useState} from 'react';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {useTheme} from '../context/ThemeProvider';
-import CustomText from './CustomText';
+// import CustomText from './CustomText';
 
 type CarouselItem = {
   image: ImageSourcePropType | undefined;
