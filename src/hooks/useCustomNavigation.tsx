@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../interfaces/types';
-// import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 type NavigationFunction = (
   screen: keyof RootStackParamList,
