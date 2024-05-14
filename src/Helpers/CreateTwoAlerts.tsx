@@ -19,5 +19,5 @@ export const createTwoButtonAlert = ({
       onPress: () => null,
       style: 'cancel',
     },
-    {text: `${text2}`, onPress: myAlertFunc, style: 'destructive'},
+    // {text: `${text2}`, onPress: myAlertFunc, style: 'destructive'},
   ]);
