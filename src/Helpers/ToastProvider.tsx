@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {ToastProviderProps} from '../interfaces/types';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 
 const ToastProvider: React.FC<ToastProviderProps> = ({
   delay = 3000,
