@@ -18,5 +18,5 @@ export const CleanDigitOutput = (output: any) => {
   if (decimal) {
     outputString = `${outputString}.${decimal}`;
   }
-  return `${outputString}${suffix}`;
+  // return `${outputString}${suffix}`;
 };
