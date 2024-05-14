@@ -2,7 +2,7 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import React from 'react';
 import {Post} from '../interfaces/types';
 import PostItem from './PostItem';
-// import FormatDateAndTime from '../Helpers/FormatDateAndTime';
+import FormatDateAndTime from '../Helpers/FormatDateAndTime';
 
 const posts: Post[] = [
   {

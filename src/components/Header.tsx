@@ -3,7 +3,7 @@ import React from 'react';
 import Icon from '../Helpers/Icon';
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import CustomText from '../Helpers/CustomText';
-// import {faBell, faEnvelope} from '@fortawesome/free-regular-svg-icons';
+import {faBell, faEnvelope} from '@fortawesome/free-regular-svg-icons';
 
 const Header = () => {
   const navigate = useCustomNavigation();
