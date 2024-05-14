@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TextProps, StyleSheet, Platform} from 'react-native';
-// import {useTheme} from '../context/ThemeProvider';
+import {useTheme} from '../context/ThemeProvider';
 
 interface CustomTextProps extends TextProps {
   fontFamily?: string;
