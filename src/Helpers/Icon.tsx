@@ -2,7 +2,7 @@ import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
 import type {PropsWithChildren} from 'react';
-// import {useTheme} from '../context/ThemeProvider';
+import {useTheme} from '../context/ThemeProvider';
 
 type IconProps = PropsWithChildren<{
   name: IconDefinition;
