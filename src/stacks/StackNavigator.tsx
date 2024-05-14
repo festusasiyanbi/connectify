@@ -13,7 +13,7 @@ import {Text} from 'react-native-paper';
 import Login from '../screens/stacks/auth/Login';
 import SignUp from '../screens/stacks/auth/SignUp';
 import UserProfile from '../screens/stacks/UserProfile';
-// import UploadPostScreen from '../screens/tabs/UploadPostScreen';
+import UploadPostScreen from '../screens/tabs/UploadPostScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const CustomScreenHeader = ({
