@@ -1,6 +1,6 @@
 export const FormatDateAndTime = (postDate: any) => {
   const currentDate: any = new Date();
-  const timeDiff = currentDate - postDate; // Time difference in milliseconds
+  const timeDiff = currentDate - postDate;
 
   const seconds = Math.floor(timeDiff / 1000);
   const minutes = Math.floor(seconds / 60);
