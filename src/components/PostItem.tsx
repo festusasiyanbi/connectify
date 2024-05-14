@@ -1,7 +1,7 @@
 import {Image, StyleSheet, View} from 'react-native';
 import React from 'react';
 import ImageGrid from '../Helpers/ImageGrid';
-import Icon from '../Helpers/Icon';
+// import Icon from '../Helpers/Icon';
 import {
   faBookmark,
   faComment,

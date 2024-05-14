@@ -1,7 +1,7 @@
 import {View, ScrollView, Image, StyleSheet} from 'react-native';
 import React from 'react';
 import {UserStory} from '../interfaces/types';
-import CustomText from '../Helpers/CustomText';
+// import CustomText from '../Helpers/CustomText';
 
 const stories: UserStory[] = [
   {
