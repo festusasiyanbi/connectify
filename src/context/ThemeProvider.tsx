@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from 'react';
-// import {Appearance, ColorSchemeName} from 'react-native';
+import {Appearance, ColorSchemeName} from 'react-native';
 
 type ThemeType = {
   light: {
