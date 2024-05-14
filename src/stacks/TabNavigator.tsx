@@ -11,7 +11,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTheme} from '../context/ThemeProvider';
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import CustomText from '../Helpers/CustomText';
-// import UploadPost from '../screens/tabs/UploadPost';
+import UploadPost from '../screens/tabs/UploadPost';
 import {
   faBell,
   faPlusSquare,
