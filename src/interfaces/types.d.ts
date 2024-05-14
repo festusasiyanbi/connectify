@@ -12,7 +12,7 @@ export type RootStackParamList = {
   Settings: undefined;
   Login: undefined;
   SignUp: undefined;
-  // UserProfile: {userId: number};
+  UserProfile: {userId: number};
 };
 
 export type User = {
