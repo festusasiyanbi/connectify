@@ -11,7 +11,10 @@ const useCustomNavigation = (): NavigationFunction => {
   const navigator =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const navigate: NavigationFunction = (screen, params) => {
+  const navigate: NavigationFunction = (
+    screen: keyof RootStackParamList,
+    params: any,
+  ) => {
     navigator.navigate(screen, params);
   };
 
