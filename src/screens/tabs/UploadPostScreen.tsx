@@ -12,7 +12,6 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {createTwoButtonAlert} from '../../Helpers/CreateTwoAlerts';
 import CustomText from '../../Helpers/CustomText';
 import Icon from '../../Helpers/Icon';
@@ -20,8 +19,9 @@ import {faImage, faTimes, faVideo} from '@fortawesome/free-solid-svg-icons';
 import {useTheme} from '../../context/ThemeProvider';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
+import { SafeAreaView } from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-// import FormatDateAndTime from '../../Helpers/FormatDateAndTime';
+import FormatDateAndTime from '../../Helpers/FormatDateAndTime';
 
 const UploadPostScreen = () => {
   const {theme} = useTheme();
@@ -52,10 +52,13 @@ const UploadPostScreen = () => {
           } else {
             setImageUris([...imageUris, ...newImageUris]);
           }
+        } else if(response.errorMessage){
+          Alert.alert('An error occured')
         }
       },
     );
   };
+
   const handleSelectImagesFromGallery = () => {
     launchImageLibrary(
       {
@@ -71,10 +74,14 @@ const UploadPostScreen = () => {
           } else {
             setImageUris([...imageUris, ...newImageUris]);
           }
+        } else if(response.errorMessage){
+          Alert.alert('An error occured')
         }
       },
     );
   };
+  
+  
 
   const handleDeleteImage = (imageUrl: any) => {
     const filteredImages = imageUris.filter(image => image !== imageUrl);

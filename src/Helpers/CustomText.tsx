@@ -27,7 +27,7 @@ const CustomText: React.FC<CustomTextProps> = ({
 
 const styles = StyleSheet.create({
   defaultText: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 'normal',
   },
 });

@@ -19,7 +19,6 @@ import useCustomNavigation from '../../../hooks/useCustomNavigation';
 import {createTwoButtonAlert} from '../../../Helpers/CreateTwoAlerts';
 import ToastProvider from '../../../Helpers/ToastProvider';
 import {SignUpUser, ToastProviderProps} from '../../../interfaces/types';
-// import {db, firebaseAuth} from '../../../firebase/FirebaseConfig';
 
 const SignUp = () => {
   const navigate = useCustomNavigation();

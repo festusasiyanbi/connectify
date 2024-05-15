@@ -1,9 +1,8 @@
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
 import Story from '../../components/Story';
 import Header from '../../components/Header';
 import Posts from '../../components/Posts';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useTheme} from '../../context/ThemeProvider';
 
 const Feed = () => {

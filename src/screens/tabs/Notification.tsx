@@ -1,10 +1,11 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, SafeAreaView, StyleSheet} from 'react-native';
 import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { useTheme } from '../../context/ThemeProvider';
 
 const Notification = () => {
+  const {theme} = useTheme();
   return (
-    <SafeAreaView>
+    <SafeAreaView style={[styles.container, {backgroundColor: theme.containerBackground}]}>
       <ScrollView>
         <View>
           <Text>Notification page</Text>
@@ -14,4 +15,9 @@ const Notification = () => {
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 export default Notification;
