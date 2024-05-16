@@ -2,49 +2,59 @@ import React from 'react';
 import useCustomNavigation from '../../../hooks/useCustomNavigation';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {ImageBackground} from 'react-native';
+import {useAuth} from '../../../context/AuthProvider';
+import Home from '../../tabs/Home';
 
 const Auth = () => {
   const navigate = useCustomNavigation();
-
+  const {currentUser} = useAuth();
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require('../../../assets/images/authImage.png')}
-        style={styles.backgroundImageStyle}>
-        <View style={styles.logoView}>
-          <Text style={styles.logoTxt}>Connectify</Text>
+      {currentUser ? (
+        <Home />
+      ) : (
+        <View style={styles.container}>
+          <ImageBackground
+            source={require('../../../assets/images/authImage.png')}
+            style={styles.backgroundImageStyle}>
+            <View style={styles.logoView}>
+              <Text style={styles.logoTxt}>Connectify</Text>
+            </View>
+            <View style={styles.operationBtnWrapper}>
+              <View style={styles.operationBtnView}>
+                <TouchableOpacity
+                  onPress={() => navigate('Home')}
+                  style={[styles.authBtn, styles.loginBtn]}>
+                  <Text style={styles.loginTxt}>Go home</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigate('Login')}
+                  style={[styles.authBtn, styles.loginBtn]}>
+                  <Text style={styles.loginTxt}>Login</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigate('SignUp')}
+                  style={[styles.authBtn, styles.signUpBtn]}>
+                  <Text style={styles.signUpTxt}>Create an account</Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <Text style={styles.copyTxt}>
+                  Developer: Festus Asiyanbi &copy; 2024
+                </Text>
+              </View>
+            </View>
+          </ImageBackground>
         </View>
-        <View style={styles.operationBtnWrapper}>
-          <View style={styles.operationBtnView}>
-            <TouchableOpacity
-              onPress={() => navigate('Home')}
-              style={[styles.authBtn, styles.loginBtn]}>
-              <Text style={styles.loginTxt}>Go home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate('Login')}
-              style={[styles.authBtn, styles.loginBtn]}>
-              <Text style={styles.loginTxt}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigate('SignUp')}
-              style={[styles.authBtn, styles.signUpBtn]}>
-              <Text style={styles.signUpTxt}>Create an account</Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <Text style={styles.copyTxt}>
-              Developer: Festus Asiyanbi &copy; 2024
-            </Text>
-          </View>
-        </View>
-      </ImageBackground>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
   backgroundImageStyle: {
     height: '100%',
     width: '100%',

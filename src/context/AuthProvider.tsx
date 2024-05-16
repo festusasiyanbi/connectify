@@ -6,12 +6,9 @@ import React, {
   ReactNode,
 } from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import { AuthContextType, User } from '../interfaces/auth.types';
 
-interface User extends FirebaseAuthTypes.User {}
 
-interface AuthContextType {
-  currentUser: User | null;
-}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

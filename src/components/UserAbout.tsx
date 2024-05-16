@@ -1,5 +1,11 @@
-import {View, StyleSheet} from 'react-native';
-import React from 'react';
+import {
+  View,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {
   IconDefinition,
   faAddressCard,
@@ -14,35 +20,45 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import Icon from '../Helpers/Icon';
-import {UserInfoInterface} from '../interfaces/types';
+import {CurrentUserInfo} from '../interfaces/types';
 import {useTheme} from '../context/ThemeProvider';
 import CustomText from '../Helpers/CustomText';
+import {useAuth} from '../context/AuthProvider';
+import useFetchUserData from '../hooks/useCurrentUserData';
+import { db } from '../firebase/Firebase';
 
 const UserAbout = () => {
   const {theme} = useTheme();
-  const userInfo: UserInfoInterface = {
+  const {currentUser} = useAuth();
+  const [isEditing, setIsEditing] = useState<string>('');
+  const [editedUserInfo, setEditedUserInfo] = useState<CurrentUserInfo | null>(
+    null,
+  );
+
+  const currentUserEmail = currentUser?.email || '';
+  const userData = useFetchUserData(currentUserEmail);
+  const [userInfo, setUserInfo] = useState<CurrentUserInfo>({
     basicInformation: {
       title: 'Basic Information',
-      name: 'Festus Asiyanbi',
-      gender: 'Male',
-      birthdate: '2 May 2001',
-      languages: ['English', 'Yoruba', 'Pidgin'],
+      name: userData?.fullName,
+      gender: '',
+      birthdate: '',
+      languages: [],
     },
     contactInformation: {
       title: 'Contact Information',
-      name: 'Festus Asiyanbi',
-      phone: '+2348149205944',
-      email: 'example@festus.com',
-      address: '127 Jarvis street, Toronto, ON',
+      name: userData?.fullName,
+      phone: '',
+      email: '',
+      address: '',
     },
     biography: {
       title: 'Biography',
-      about:
-        'I am a software engineer with a passion for coding and technology.',
-      interests: ['Programming', 'Gaming', 'Reading'],
-      achievements: ['Completed coding bootcamp', 'Won hackathon prize'],
+      about: '',
+      interests: [],
+      achievements: [],
     },
-  };
+  });
 
   const getKeyInitial = (key: string) => {
     const words = key.split(' ');
@@ -87,7 +103,38 @@ const UserAbout = () => {
       default:
         return '';
     }
-    return <Icon name={iconName} color={theme.pBackground} />;
+    return <Icon name={iconName} color={theme.pPrimary} />;
+  };
+
+  const handleSave = async () => {
+    if (editedUserInfo) {
+      try {
+        const docRef = db.collection('users').doc(currentUserEmail);
+        await docRef.update(editedUserInfo);
+        setUserInfo(editedUserInfo);
+        setEditedUserInfo(null);
+        setIsEditing('');
+        Alert.alert('Success', 'Changes saved successfully.');
+      } catch (error) {
+        Alert.alert('Error', 'Failed to save changes.');
+        console.error('Error updating document:', error);
+      }
+    }
+    setIsEditing('');
+  };
+
+  const handleInputChange = (
+    category: keyof CurrentUserInfo,
+    field: keyof any,
+    value: string | string[],
+  ) => {
+    setUserInfo(prevState => ({
+      ...prevState,
+      [category]: {
+        ...prevState[category],
+        [field]: value,
+      },
+    }));
   };
   return (
     <View style={styles.container}>
@@ -106,13 +153,39 @@ const UserAbout = () => {
                       <CustomText style={styles.keyTxt}>
                         {getKeyInitial(key)}
                       </CustomText>
-                      <CustomText>
-                        {Array.isArray(value) ? value.join(', ') : value}
-                      </CustomText>
+                      {isEditing && isEditing === key ? (
+                        <TextInput
+                          style={[styles.textInputStyle, {borderColor: theme.borderColor}]}
+                          value={
+                            Array.isArray(value)
+                              ? value.join(', ')
+                              : (value as string)
+                          }
+                          onChangeText={text =>
+                            handleInputChange(
+                              category as keyof CurrentUserInfo,
+                              key,
+                              text,
+                            )
+                          }
+                        />
+                      ) : (
+                        <CustomText>
+                          {Array.isArray(value)
+                            ? value.join(', ')
+                            : (value as React.ReactNode)}
+                        </CustomText>
+                      )}
                     </View>
-                  </View>
-                  <View>
-                    <Icon name={faPen} size={12} />
+                    {isEditing && isEditing === key ? (
+                      <TouchableOpacity onPress={handleSave}>
+                        <CustomText>save</CustomText>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity onPress={() => setIsEditing(key)}>
+                        <Icon name={faPen} size={12} />
+                      </TouchableOpacity>
+                    )}
                   </View>
                 </View>
               )}
@@ -126,6 +199,7 @@ const UserAbout = () => {
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     marginVertical: 15,
     paddingHorizontal: 20,
   },
@@ -134,6 +208,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   infoView: {
+    width: '100%',
     rowGap: 10,
   },
   infoContainer: {
@@ -147,7 +222,7 @@ const styles = StyleSheet.create({
     borderColor: '#dddadd',
   },
   infoWrapper: {
-    width: '65%',
+    width: '68%',
     flexDirection: 'row',
     columnGap: 30,
     paddingLeft: 10,
@@ -161,12 +236,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   keyValueView: {
+    width: '100%',
     rowGap: 5,
     marginVertical: 5,
   },
   keyTxt: {
     fontSize: 12,
     color: '#888888',
+  },
+  textInputStyle: {
+    width: '100%',
+    height: 30,
+    borderWidth: 1,
+    marginTop: 1,
+    paddingVertical: 1,
+    fontSize: 12,
   },
 });
 export default UserAbout;

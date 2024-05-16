@@ -101,6 +101,9 @@ const SignUp = () => {
         username: signUpForm.username,
         email: signUpForm.email,
         fullName: signUpForm.fullName,
+        posts: [],
+        followers: [],
+        following: [],
       });
 
       setToastProps({

@@ -13,32 +13,32 @@ import React, {useState} from 'react';
 import Icon from '../../Helpers/Icon';
 import {faMagnifyingGlass, faTimes} from '@fortawesome/free-solid-svg-icons';
 import {CleanDigitOutput} from '../../Helpers/CleanDigitOutput';
-import {User} from '../../interfaces/types';
+import {UserProfile} from '../../interfaces/types';
 import {useTheme} from '../../context/ThemeProvider';
 import CustomText from '../../Helpers/CustomText';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 
-export const users: User[] = [
+export const users: UserProfile[] = [
   {
     id: 1,
     username: 'fapseydolls',
     bio: 'I am who he says I am',
     user_avatar: require('../../assets/images/avatar.png'),
-    followersCount: 10103,
+    followers: [],
   },
   {
     id: 2,
     username: 'jenniferneche',
     bio: 'I am who he says I am',
     user_avatar: require('../../assets/images/avatar.png'),
-    followersCount: 21103,
+    followers: [],
   },
   {
     id: 3,
     username: 'ayowolemi',
     bio: 'I am who he says I am',
     user_avatar: require('../../assets/images/avatar.png'),
-    followersCount: 10103003,
+    followers: [],
   },
 ];
 
@@ -114,7 +114,7 @@ const Search = () => {
                           {user.bio.length > 10
                             ? user.bio.slice(0, 10) + '...'
                             : user.bio}{' '}
-                          &middot; {CleanDigitOutput(user.followersCount)}{' '}
+                          &middot; {CleanDigitOutput(user.followers)}{' '}
                           followers
                         </CustomText>
                       </View>

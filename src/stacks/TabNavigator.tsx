@@ -6,7 +6,6 @@ import {RootStackParamList} from '../interfaces/types';
 import Feed from '../screens/tabs/Feed';
 import Search from '../screens/tabs/Search';
 import Notification from '../screens/tabs/Notification';
-import Profile from '../screens/tabs/Profile';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useTheme} from '../context/ThemeProvider';
 import useCustomNavigation from '../hooks/useCustomNavigation';
@@ -18,6 +17,7 @@ import {
   faUserCircle,
 } from '@fortawesome/free-regular-svg-icons';
 import {faHomeAlt, faSearch} from '@fortawesome/free-solid-svg-icons';
+import CurrentUserProfile from '../screens/tabs/CurrentUserProfile';
 
 const TabNavigator = () => {
   const {theme} = useTheme();
@@ -98,7 +98,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={CurrentUserProfile}
         options={{headerShown: false}}
       />
     </Tab.Navigator>

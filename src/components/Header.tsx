@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Icon from '../Helpers/Icon';
 import useCustomNavigation from '../hooks/useCustomNavigation';
@@ -9,7 +9,7 @@ const Header = () => {
   const navigate = useCustomNavigation();
   return (
     <View style={styles.container}>
-      <CustomText style={styles.logoTxt}>Connectify</CustomText>
+      <Text style={styles.logoTxt}>Connectify</Text>
       <View style={styles.notificationView}>
         <View style={styles.notifierView}>
           <CustomText>{''}</CustomText>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   logoTxt: {
     fontSize: 30,
-    color: '#8971e1',
+    color: '#9747FF',
     fontWeight: '700',
     paddingBottom: 40,
   },
