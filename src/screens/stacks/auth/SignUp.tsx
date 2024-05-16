@@ -16,9 +16,11 @@ import CustomText from '../../../Helpers/CustomText';
 import Icon from '../../../Helpers/Icon';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import useCustomNavigation from '../../../hooks/useCustomNavigation';
-import {createTwoButtonAlert} from '../../../Helpers/CreateTwoAlerts';
+import {CreateTwoButtonAlert} from '../../../Helpers/CreateTwoAlerts';
 import ToastProvider from '../../../Helpers/ToastProvider';
-import {SignUpUser, ToastProviderProps} from '../../../interfaces/types';
+import {ToastProviderProps} from '../../../interfaces/types';
+import {db, fireAuth} from '../../../firebase/Firebase';
+import {SignUpUser} from '../../../interfaces/auth.types';
 
 const SignUp = () => {
   const navigate = useCustomNavigation();
@@ -55,92 +57,93 @@ const SignUp = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [showToast, navigate, toastProps]);
+  }, [showToast]);
 
-  // const handleSignUp = async () => {
-  //   if (
-  //     !signUpForm.username ||
-  //     !signUpForm.email ||
-  //     !signUpForm.password ||
-  //     !signUpForm.fullName
-  //   ) {
-  //     setToastProps({
-  //       ...toastProps,
-  //       type: 'error',
-  //       text1: 'Validation Error',
-  //       text2: 'Please fill all the provided inputs.',
-  //     });
-  //     setShowToast(true);
-  //     return;
-  //   }
+  const handleSignUp = async () => {
+    if (
+      !signUpForm.username ||
+      !signUpForm.email ||
+      !signUpForm.password ||
+      !signUpForm.fullName
+    ) {
+      setToastProps({
+        ...toastProps,
+        type: 'error',
+        text1: 'Validation Error',
+        text2: 'Please fill all the provided inputs.',
+      });
+      setShowToast(true);
+      return;
+    }
 
-  //   try {
-  //     const usernameCheck = await db
-  //       .collection('users')
-  //       .where('username', '==', signUpForm.username)
-  //       .get();
-  //     if (!usernameCheck.empty) {
-  //       setToastProps({
-  //         ...toastProps,
-  //         type: 'error',
-  //         text1: 'Username Taken',
-  //         text2: 'Please choose a different username.',
-  //       });
-  //       setShowToast(true);
-  //       return;
-  //     }
+    try {
+      const usernameCheck = await db
+        .collection('users')
+        .where('username', '==', signUpForm.username)
+        .get();
+      if (!usernameCheck.empty) {
+        setToastProps({
+          ...toastProps,
+          type: 'error',
+          text1: 'Username Taken',
+          text2: 'Please choose a different username.',
+        });
+        setShowToast(true);
+        return;
+      }
 
-  //     const userCredential = await firebaseAuth.createUserWithEmailAndPassword(
-  //       signUpForm.email,
-  //       signUpForm.password,
-  //     );
+      const userCredential = await fireAuth.createUserWithEmailAndPassword(
+        signUpForm.email,
+        signUpForm.password,
+      );
 
-  //     await db.collection('users').doc(userCredential.user?.uid).set({
-  //       username: signUpForm.username,
-  //       email: signUpForm.email,
-  //       fullName: signUpForm.fullName,
-  //     });
+      await db.collection('users').doc(userCredential.user?.uid).set({
+        username: signUpForm.username,
+        email: signUpForm.email,
+        fullName: signUpForm.fullName,
+      });
 
-  //     setToastProps({
-  //       ...toastProps,
-  //       type: 'success',
-  //       text1: 'Sign Up Successful',
-  //       text2: 'You can now log in with your credentials.',
-  //     });
-  //     setShowToast(true);
-  //     navigate('Login');
-  //   } catch (error: any) {
-  //     let errorMessage = 'An unknown error occurred. Please try again.';
+      setToastProps({
+        ...toastProps,
+        type: 'success',
+        text1: 'Sign Up Successful',
+        text2: 'You can now log in with your credentials.',
+      });
+      setShowToast(true);
+      setFocusedInput(null);
+      navigate('Login');
+    } catch (error: any) {
+      let errorMessage = 'An unknown error occurred. Please try again.';
 
-  //     switch (error.code) {
-  //       case 'auth/invalid-email':
-  //         errorMessage = 'The email entered is invalid. Please try again.';
-  //         break;
-  //       case 'auth/email-already-in-use':
-  //         errorMessage =
-  //           'Email is already in use. Please use a different email address.';
-  //         break;
-  //       case 'auth/weak-password':
-  //         errorMessage =
-  //           'Password is too weak. Please choose a stronger password.';
-  //         break;
-  //       case 'auth/network-request-failed':
-  //         errorMessage =
-  //           'Network error. Please check your internet connection and try again.';
-  //         break;
-  //       default:
-  //         break;
-  //     }
+      switch (error.code) {
+        case 'auth/invalid-email':
+          errorMessage = 'The email entered is invalid. Please try again.';
+          break;
+        case 'auth/email-already-in-use':
+          errorMessage =
+            'Email is already in use. Please use a different email address.';
+          break;
+        case 'auth/weak-password':
+          errorMessage =
+            'Password is too weak. Please choose a stronger password.';
+          break;
+        case 'auth/network-request-failed':
+          errorMessage =
+            'Network error. Please check your internet connection and try again.';
+          break;
+        default:
+          break;
+      }
 
-  //     setToastProps({
-  //       ...toastProps,
-  //       type: 'error',
-  //       text1: 'An error occurred',
-  //       text2: errorMessage,
-  //     });
-  //     setShowToast(true);
-  //   }
-  // };
+      setToastProps({
+        ...toastProps,
+        type: 'error',
+        text1: 'An error occurred',
+        text2: errorMessage,
+      });
+      setShowToast(true);
+    }
+  };
 
   const handlePressOutside = () => {
     Keyboard.dismiss();
@@ -183,7 +186,7 @@ const SignUp = () => {
             <TouchableOpacity
               style={styles.faTimesBtn}
               onPress={() =>
-                createTwoButtonAlert({
+                CreateTwoButtonAlert({
                   title: 'Cancel Sign up?',
                   message: 'Are you sure you want to stop signing up?',
                   text1: 'Cancel',
@@ -262,7 +265,7 @@ const SignUp = () => {
                 onBlur={handleBlur}
                 placeholderTextColor="#ddaadd"
               />
-              <TouchableOpacity style={styles.authBtn}>
+              <TouchableOpacity style={styles.authBtn} onPress={handleSignUp}>
                 <CustomText style={styles.loginTxt}>Sign Up</CustomText>
               </TouchableOpacity>
             </View>

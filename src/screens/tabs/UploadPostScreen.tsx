@@ -10,18 +10,20 @@ import {
   Keyboard,
   Alert,
   ScrollView,
+  PermissionsAndroid,
+  Linking,
 } from 'react-native';
 import React, {useState} from 'react';
-import {createTwoButtonAlert} from '../../Helpers/CreateTwoAlerts';
+import {CreateTwoButtonAlert} from '../../Helpers/CreateTwoAlerts';
 import CustomText from '../../Helpers/CustomText';
 import Icon from '../../Helpers/Icon';
 import {faImage, faTimes, faVideo} from '@fortawesome/free-solid-svg-icons';
 import {useTheme} from '../../context/ThemeProvider';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import { SafeAreaView } from 'react-native';
+import {SafeAreaView} from 'react-native';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import FormatDateAndTime from '../../Helpers/FormatDateAndTime';
+// import FormatDateAndTime from '../../Helpers/FormatDateAndTime';
 
 const UploadPostScreen = () => {
   const {theme} = useTheme();
@@ -35,53 +37,114 @@ const UploadPostScreen = () => {
   const handleInputChange = (newText: string) => {
     setText(newText);
   };
-
-  const handleOpenCamera = () => {
-    launchCamera(
-      {
-        mediaType: 'photo',
-        saveToPhotos: true,
-        includeBase64: false,
-      },
-      response => {
-        if (!response.didCancel && response.assets) {
-          const newImageUris = response.assets.map(asset => asset.uri);
-          if (imageUris.length >= 5) {
-            Alert.alert('You can only capture up to 5 images');
-            return;
-          } else {
-            setImageUris([...imageUris, ...newImageUris]);
-          }
-        } else if(response.errorMessage){
-          Alert.alert('An error occured')
+  const handleOpenCamera = async () => {
+    const options: any = {
+      mediaType: 'photo',
+      saveToPhotos: true,
+      includeBase64: false,
+    };
+    try {
+    if (Platform.OS === 'android') {
+      const permission = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
+      if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
+        Alert.alert(
+          'Permission Denied',
+          'You need to grant camera permission to use this feature. Would you like to go to app settings?',
+          [
+            {
+              text: 'Cancel',
+              onPress: () =>
+                console.log('Permission denied, operation canceled.'),
+              style: 'cancel',
+            },
+            {text: 'Settings', onPress: () => Linking.openSettings()},
+          ],
+        );
+        return;
+      }
+    }
+      const response = await launchCamera(options);
+      if (response.didCancel) {
+        console.log('Camera operation cancelled.');
+      } else if (response.assets) {
+        const newImageUris = response.assets.map(asset => asset.uri);
+        if (imageUris.length + newImageUris.length > 5) {
+          Alert.alert(
+            'Maximum Image Limit Reached',
+            'You can only capture up to 5 images.',
+          );
+        } else {
+          setImageUris(prevUris => [...prevUris, ...newImageUris]);
         }
-      },
-    );
+      } else if (response.errorMessage) {
+        console.log('Camera error:', response.errorMessage);
+        Alert.alert(
+          'Camera Error',
+          'An error occurred while accessing the camera.',
+        );
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'An error occurred while opening the camera.');
+    }
   };
-
-  const handleSelectImagesFromGallery = () => {
-    launchImageLibrary(
-      {
-        mediaType: 'photo',
-        includeBase64: false,
-      },
-      response => {
-        if (!response.didCancel && response.assets) {
-          const newImageUris = response.assets.map(asset => asset.uri);
-          if (imageUris.length >= 5) {
-            Alert.alert('You can only select up to 5 images');
-            return;
-          } else {
-            setImageUris([...imageUris, ...newImageUris]);
-          }
-        } else if(response.errorMessage){
-          Alert.alert('An error occured')
+  const handleSelectImagesFromGallery = async () => {
+    const options: any = {
+      mediaType: 'photo',
+      includeBase64: false,
+    };
+    try {
+      if (Platform.OS === 'android') {
+        const permission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        );
+        if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert(
+            'Permission Denied',
+            'You need to grant storage permission to access the image gallery. Would you like to go to app settings?',
+            [
+              {
+                text: 'Cancel',
+                onPress: () =>
+                  console.log('Permission denied, operation canceled.'),
+                style: 'cancel',
+              },
+              {text: 'Settings', onPress: () => Linking.openSettings()},
+            ],
+          );
+          return;
         }
-      },
-    );
+      }
+      const response = await launchImageLibrary(options);
+      if (response.didCancel) {
+        console.log('Image selection canceled.');
+      } else if (response.assets) {
+        const newImageUris = response.assets.map(asset => asset.uri);
+        if (imageUris.length + newImageUris.length > 5) {
+          Alert.alert(
+            'Maximum Image Limit Reached',
+            'You can only select up to 5 images.',
+          );
+        } else {
+          setImageUris(prevUris => [...prevUris, ...newImageUris]);
+        }
+      } else if (response.errorMessage) {
+        console.log('Image selection error:', response.errorMessage);
+        Alert.alert(
+          'Image Selection Error',
+          'An error occurred while accessing the image gallery.',
+        );
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert(
+        'Error',
+        'An error occurred while selecting images from the gallery.',
+      );
+    }
   };
-  
-  
 
   const handleDeleteImage = (imageUrl: any) => {
     const filteredImages = imageUris.filter(image => image !== imageUrl);
@@ -115,7 +178,7 @@ const UploadPostScreen = () => {
             <TouchableOpacity
               style={styles.faTimesBtn}
               onPress={() =>
-                createTwoButtonAlert({
+                CreateTwoButtonAlert({
                   title: 'Cancel upload?',
                   message: 'Are you sure you want to stop posting?',
                   text1: 'No',
@@ -172,7 +235,7 @@ const UploadPostScreen = () => {
                   <TouchableOpacity
                     key={index}
                     onPress={() =>
-                      createTwoButtonAlert({
+                      CreateTwoButtonAlert({
                         title: 'Delete Photo?',
                         message:
                           'Are you sure you want to delete photo? You can not undo this once it is done.',
@@ -202,8 +265,8 @@ const UploadPostScreen = () => {
                     text.length >= 320 && text.length < 345
                       ? styles.orangeTxt
                       : text && text.length >= 345
-                      ? styles.redTxt
-                      : null
+                        ? styles.redTxt
+                        : null
                   }>
                   {text.length} / 350
                 </CustomText>

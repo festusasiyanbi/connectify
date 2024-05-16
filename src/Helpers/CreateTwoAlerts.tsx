@@ -1,6 +1,6 @@
 import {Alert} from 'react-native';
 
-export const createTwoButtonAlert = ({
+export const CreateTwoButtonAlert = ({
   title,
   message,
   text1,

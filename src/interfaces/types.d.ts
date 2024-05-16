@@ -1,6 +1,6 @@
 import {ImageSourcePropType} from 'react-native';
 
-export type RootStackParamList = {
+export interface RootStackParamList {
   Authentication: undefined;
   Feed: undefined;
   Home: undefined;
@@ -15,7 +15,7 @@ export type RootStackParamList = {
   UserProfile: {userId: number};
 };
 
-export type User = {
+export interface User {
   id: number;
   username: string;
   bio: string;
@@ -23,7 +23,7 @@ export type User = {
   followersCount: number;
 };
 
-export type UserInfoInterface = {
+export interface UserInfoInterface {
   basicInformation: {
     title: string;
     name: string;
@@ -46,12 +46,12 @@ export type UserInfoInterface = {
   };
 };
 
-export type UserActivity = {
+export interface UserActivity {
   id: number;
   activityCount: number;
   activityType: string;
 };
-export type Post = {
+export interface Post {
   id: number;
   name: string;
   username: string;
@@ -66,22 +66,15 @@ export type Post = {
   user_avatar: ImageSourcePropType | undefined;
 };
 
-export type UserStory = {
+export interface UserStory {
   id: number;
   user_avatar: ImageSourcePropType | undefined;
   user_name: string;
 };
 
-export type ToastProviderProps = {
+export interface ToastProviderProps {
   delay?: number;
   type: 'error' | 'success' | 'info' | 'warning';
   text1: string;
   text2?: string;
-};
-
-export type SignUpUser = {
-  fullName: string;
-  username: string;
-  email: string;
-  password: string;
 };
